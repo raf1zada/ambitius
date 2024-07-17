@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Profissional</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+        body.loaded {
+    opacity: 1;
+}
+        header {
+            color: #c20000;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        header img {
+            width: 180px;
+            margin-bottom: 10px;
+        }
+
+        nav a {
+            margin: 0 15px;
+            color: #fff;
+            text-decoration: none;
+        }
+        section {
+            color: darkgoldenrod;
+        }
+        #quiz-intro h2 {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        main {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .etapa {
+            margin: 20px 0;
+        }
+
+        .resultado-container {
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            color: #B22222;
+            width: 100%;
+
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            margin-top: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .options-container {
+            margin: 10px 0;
+        }
+
+        .option {
+            background-color: #4682B4;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .option input[type="radio"] {
+            display: none;
+        }
+
+        .option label {
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            display: block;
+            height: 100%;
+        }
+
+        .option input[type="radio"]:checked + label {
+            background-color: #0056b3;
+            border-radius: 5px;
+        }
+
+        .resultado-container img {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #quiz-intro img {
+            width: 200px; 
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #quiz-intro h2 {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 20px 0; /* Espaço acima e abaixo do parágrafo */
+            font-family: Arial, sans-serif; /* Fonte igual às outras */
+            font-size: 1em; /* Tamanho da fonte igual */
+        }
+
+        .benefits {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+            color: #8B0000;
+        }
+
+        .benefit-item {
+            margin: 10px 0;
+        }
+        .etapa img {
+            display: block;
+            margin: 30px auto;
+            width: 150px; /* Ajuste o tamanho conforme necessário */
+        }
+        .Problemas {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: block;
+        }
+
+        .Problemas h2{
+            color: #8B0000;
+        }
+        .Problemas h3 {
+            color: #8B0000;
+        }
+        .sobre-ebook {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .sobre-ebook h2 {
+            color: #8B0000;
+            margin-bottom: 10px;
+        }
+
+        .sobre-ebook p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .sobre-ebook h3 {
+            color: #8B0000;
+            margin-top: 20px;
+        }
+
+        .benefit-item {
+            margin: 10px 0;
+            font-size: 1.1em;
+            color: #fff;
+        }
+
+        .sobre-ebook ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sobre-ebook li {
+
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px 0;
+            color: white;
+
+        }
+        .receber-container {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .receber-container h3 {
+            color: #8B0000;
+        }
+        .chamada-container {
+
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+
+        }
+        .chamada-container h2 {
+            color: #8B0000;
+        }
+        .chamada-container img {
+            width: 50%;
+        }
+        .center-img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%; /* ou um tamanho específico, se preferir */
+        max-width: 400px; /* Ajuste o tamanho máximo conforme necessário */
+        }
+
+    </style>
+</head>
+<body>
+    <header id="header">
+        <img src="imagens/247 (1).png" alt="Logo" />
+        <h1>Bem-vindo ao site do Ambitious Mind!</h1>
+        <nav>
+            <a href="#">Desperte o que há dentro de você</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="quiz-intro">
+            <h2>Descubra se você tem uma mentalidade ambiciosa com esse teste rápido e totalmente gratuito</h2>
+            <button id="start-quiz">Começar teste grátis</button>
+            <h2>Não quer fazer o teste? Quer apenas comprar o livro? Clique no botão abaixo</h2>
+            <button onclick="window.location.href='https://pay.kiwify.com.br/a81GcAV'">Saber mais sobre o livro</button>
+            <img src="imagens/247.png" alt="Logo" />
+        </section>
+
+        <div class="quiz-container" style="display:none;">
+            <form id="quiz-form">
+                <div id="etapa1" class="etapa">
+                    <div class="question">
+                        <h2>Qual seu momento atual?</h2>
+                        <div class="options-container">
+                            <div class="option">
+                                <input type="radio" name="q1" value="a">
+                                <label onclick="proximaEtapa()">Vivo procrastinando e não busco por evolução</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1" value="b">
+                                <label onclick="proximaEtapa()">Estou motivado e tento evoluir a cada dia</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1" value="c">
+                                <label onclick="proximaEtapa()">Me acho fracassado e vivo com medo dos outros me julgarem</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1" value="d">
+                                <label onclick="proximaEtapa()">Tenho uma mentalidade forte, sempre busco por evolução e foco nas minhas metas</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q1" value="e">
+                                <label onclick="proximaEtapa()">Estou tranquilo e busco novos conhecimentos</label>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="imagens/247.png" alt="Logo" />
+                </div>
+
+                <div id="etapa2" class="etapa" style="display: none;">
+                    <div class="question">
+                        <h2>Qual seu maior problema atual?</h2>
+                        <div class="options-container">
+                            <div class="option">
+                                <input type="radio" name="q2" value="a">
+                                <label onclick="proximaEtapa()">Falta de dinheiro</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q2" value="b">
+                                <label onclick="proximaEtapa()">Problemas mentais como ansiedade ou depressão</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q2" value="c">
+                                <label onclick="proximaEtapa()">Passado sujo</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q2" value="d">
+                                <label onclick="proximaEtapa()">Não tenho problemas</label>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="imagens/247.png" alt="Logo" />
+                </div>
+
+                <div id="etapa3" class="etapa" style="display: none;">
+                    <div class="question">
+                        <h2>Você possui hábitos?</h2>
+                        <div class="options-container">
+                            <div class="option">
+                                <input type="radio" name="q3" value="a">
+                                <label onclick="proximaEtapa()">Sim</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q3" value="b">
+                                <label onclick="proximaEtapa()">Não</label>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="imagens/247.png" alt="Logo" />
+                </div>
+
+                <div id="etapa4" class="etapa" style="display: none;">
+                    <div class="question">
+                        <h2>Quando um novo problema aparece, o que você costuma fazer?</h2>
+                        <div class="options-container">
+                            <div class="option">
+                                <input type="radio" name="q4" value="a">
+                                <label onclick="proximaEtapa()">Avalio a situação e busco soluções práticas</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q4" value="b">
+                                <label onclick="proximaEtapa()">Fico paralisado, sem saber como agir.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q4" value="c">
+                                <label onclick="proximaEtapa()">Pesquiso e busco conselhos de mentores ou especialistas.</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q4" value="d">
+                                <label onclick="proximaEtapa()">Ignoro e espero que o problema se resolva sozinho.</label>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="imagens/247.png" alt="Logo" />
+                </div>
+
+                <div id="etapa5" class="etapa" style="display: none;">
+                    <div class="question">
+                        <h2>Qual é a sua maior motivação para crescer?</h2>
+                        <div class="options-container">
+                            <div class="option">
+                                <input type="radio" name="q5" value="a">
+                                <label onclick="proximaEtapa()">Realizar meus sonhos</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q5" value="b">
+                                <label onclick="proximaEtapa()">Ajudar os outros</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q5" value="c">
+                                <label onclick="proximaEtapa()">Ser reconhecido</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q5" value="d">
+                                <label onclick="proximaEtapa()">Ter estabilidade financeira</label>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="imagens/247.png" alt="Logo" />
+                </div>
+
+                <div id="etapa6" class="etapa" style="display: none;">
+                    <div class="question">
+                        <h2>Você se considera uma pessoa resiliente?</h2>
+                        <div class="options-container">
+                            <div class="option">
+                                <input type="radio" name="q6" value="a">
+                                <label onclick="proximaEtapa()">Sim, sempre me recupero de desafios</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q6" value="b">
+                                <label onclick="proximaEtapa()">Às vezes, depende da situação</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q6" value="c">
+                                <label onclick="proximaEtapa()">Não, tenho dificuldades em lidar com problemas</label>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="imagens/247.png" alt="Logo" />
+                </div>
+
+                <div id="etapa7" class="etapa" style="display: none;">
+                    <div class="question">
+                        <h2>Qual é a sua visão para o futuro?</h2>
+                        <div class="options-container">
+                            <div class="option">
+                                <input type="radio" name="q7" value="a">
+                                <label onclick="proximaEtapa()">Ter sucesso em minha carreira</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q7" value="b">
+                                <label onclick="proximaEtapa()">Viver em paz e feliz</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q7" value="c">
+                                <label onclick="proximaEtapa()">Contribuir para a sociedade</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q7" value="d">
+                                <label onclick="proximaEtapa()">Aprender constantemente</label>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="imagens/247.png" alt="Logo" />
+                </div>
+
+                <div id="etapa8" class="etapa" style="display: none;">
+                    <div class="question">
+                        <h2>Você já teve um mentor?</h2>
+                        <div class="options-container">
+                            <div class="option">
+                                <input type="radio" name="q8" value="a">
+                                <label onclick="proximaEtapa()">Sim, foi fundamental para minha evolução</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q8" value="b">
+                                <label onclick="proximaEtapa()">Sim, mas não tenho contato atualmente</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q8" value="c">
+                                <label onclick="proximaEtapa()">Não, nunca tive um mentor</label>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="imagens/247.png" alt="Logo" />
+                </div>
+
+
+                <div id="etapa10" class="etapa" style="display: none;">
+                    <div class="question">
+                        <h2>Qual é a sua maior inspiração?</h2>
+                        <div class="options-container">
+                            <div class="option">
+                                <input type="radio" name="q10" value="a">
+                                <label onclick="finalizarQuiz()">Personalidades de sucesso</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q10" value="b">
+                                <label onclick="finalizarQuiz()">Minha família</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q10" value="c">
+                                <label onclick="finalizarQuiz()">Amigos e colegas</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="q10" value="d">
+                                <label onclick="finalizarQuiz()">Livros e conhecimento</label>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="imagens/247.png" alt="Logo" />
+                </div>
+            </form>
+        </div>
+
+        <div class="resultado-container" id="resultado" style="display: none;">
+            <h1>Com base nas suas respostas, a Ambitious Mind oferece o eBook "A Arte de Reprogramar Sua Mente" que tem o potencial de transformar sua vida em até 30 dias, guiando você rumo a uma mentalidade mais forte e focada.</h1>
+            <img src="imagens/desconto (1).png" alt="Resultado do Quiz" class="center-img">
+            <button onclick="window.location.href='https://pay.kiwify.com.br/a81GcAV'">Compre agora</button>
+            <div class="Problemas">
+                <h2>PROVAVELMENTE VOCÊ DEVE ESTAR PASSANDO POR ISSO:</h2>
+                <div class="benefit-item">❌ DESCONTENTE COM SUA SITUAÇÃO ATUAL</div>
+                <div class="benefit-item">❌ SEM DIREÇÃO, SEM SABER POR ONDE COMEÇAR</div>
+                <div class="benefit-item">❌ PROCRASTINANDO EM TODAS AS ÁREAS FICANDO PARADO NO TEMPO</div>
+                <h3>COMO O "A Arte de Reprogramar Sua Mente" PODE TE AJUDAR:</h3>
+                <div class="benefit-item">✅ DESENVOLVER UMA MENTALIDADE MADURA E INTELIGENTE</div>
+                <div class="benefit-item">✅ CRIAR UMA VIDA PLENA E INSPIRADORA</div>
+                <div class="benefit-item">✅ MUDAR COMPLETAMENTE A FORMA DE PENSAR E AGIR</div>
+            </div>
+            <div class="benefits">
+                <h2>O que o ebook "A Arte de Reprogramar Sua Mente" oferece:</h2>
+                <div class="benefit-item">📚 Técnicas comprovadas para reprogramar sua mente e sair da procastinação/</div>
+                <div class="benefit-item">🚀 Métodos práticos para superar bloqueios emocionais e limitações pessoais.</div>
+                <div class="benefit-item">🧠 Exercícios práticos e comprovados para fortalecer sua resiliência e determinação.</div>
+                <div class="benefit-item">🌟 Inspiração e motivação para você se tornar a melhor versão de si mesmo.</div>
+                <div class="benefit-item">💡 Conteúdo exclusivo que vai além do que você encontra em ebooks tradicionais.</div>
+                <div class="benefit-item">💸O ebook tem um preço acesível para todos.</div>
+            </div>
+
+            <div class="sobre-ebook">
+
+                <h3>Para quem é este eBook:</h3>
+                <div class="benefit-item">🦾Pessoas em busca de autodesenvolvimento e crescimento pessoal.</div>
+                <div class="benefit-item">📈Aqueles que desejam superar desafios e alcançar suas metas.</div>
+                <div class="benefit-item">💆‍♂️Aqueles que buscam despertar o potencial que há dentro de si.</div>
+                <div class="benefit-item">🧘‍♂️Aqueles que desejam se tornar melhores e mais resilientes.</div>
+                <div class="benefit-item">🦾Aqueles que desejam se tornar mais fortes e mais respeitados.</div>
+                <div class="benefit-item">🏃‍♂️‍➡️Aqueles que desejam se tornar mais fortes físicamente e mentalmente.</div>
+                <div class="benefit-item">👔Aqueles que desejam evoluir profissionalmente.</div>
+        </div>
+            <div class="receber-container">
+                <h3>O que você receberá:</h3>
+                <div class="benefit-item">📕Logo após a compra, receberá o acesso imediato ao eBook em formato digital.</div>
+                <div class="benefit-item">🤓Um ebook feito com anos de estudo e com tudo comprovado.</div>
+                <div class="benefit-item">📩Quem adquirir, terá acesso ao suporte 24hrs do ambitious mind para qualquer tipo de conversas, seja ela profunda ou apenas uma dúvida.</div>
+
+            </div>
+            <img src="https://paulagasparini.com.br/wp-content/uploads/2022/03/selo7dias.png" alt="Selo 7 Dias" style="display: block; margin: 20px auto; width: 200px;">
+
+            <div class="chamada-container">
+                <h2>Não perca a oportunidade de transformar sua vida!</h2>
+                <p>Adquira agora mesmo o seu eBook e comece sua jornada de autodesenvolvimento!</p>
+                <img src="imagens/desconto (1).png" alt="Selo 7 Dias" style="display: block; margin: 20px auto; width: 250px;">
+                <button onclick="window.location.href='https://pay.kiwify.com.br/a81GcAV'">Compre agora</button>
+            </div>
+
+
+    <script>
+        window.addEventListener('load', () => {
+    document.body.classList.add('loaded');
+});
+
+        const etapas = document.querySelectorAll('.etapa');
+        let etapaAtual = 0;
+
+        document.getElementById('start-quiz').addEventListener('click', () => {
+            document.getElementById('header').style.display = 'none';
+            document.getElementById('quiz-intro').style.display = 'none';
+            document.querySelector('.quiz-container').style.display = 'block';
+            mostrarEtapa(etapaAtual);
+        });
+
+        function mostrarEtapa(indice) {
+            etapas.forEach((etapa, index) => {
+                etapa.style.display = index === indice ? 'block' : 'none';
+            });
+        }
+
+        function proximaEtapa() {
+            if (etapaAtual < etapas.length - 1) {
+                etapaAtual++;
+                mostrarEtapa(etapaAtual);
+            } else {
+                finalizarQuiz();
+            }
+        }
+
+        function finalizarQuiz() {
+            document.querySelector('.quiz-container').style.display = 'none';
+            document.getElementById('resultado').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
